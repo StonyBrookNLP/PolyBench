@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PolyBench — Teaching and Evaluating LLMs to Reason About Polymer Design</title>
+<meta name="description" content="PolyBench is a 125K+ task benchmark for training and evaluating LLMs on polymer design reasoning, built on a knowledge base of 13M+ experimental and synthetic polymer data points with knowledge-augmented chain-of-thought supervision.">
+<meta name="author" content="Dikshya Mohanty, Mohammad Saqib Hasan, Syed Mostofa Monsur, Size Zheng, Benjamin Hsiao, Niranjan Balasubramanian">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="PolyBench — Teaching and Evaluating LLMs to Reason About Polymer Design">
+<meta property="og:description" content="A 125K+ task benchmark for training and evaluating LLMs on polymer design reasoning. Under review; accepted at LM4Sci @ COLM 2026.">
+<meta property="og:image" content="https://stonybrooknlp.github.io/PolyBench/static/images/overview.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%A7%AC%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;750&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+<!-- ============================ NAV ============================ -->
+<nav class="nav" id="nav">
+  <div class="nav__inner">
+    <a class="nav__brand" href="#top">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="5" cy="7" r="2.6" fill="currentColor"/>
+        <circle cx="12" cy="16" r="2.6" fill="currentColor" opacity=".55"/>
+        <circle cx="19" cy="7" r="2.6" fill="currentColor"/>
+        <path d="M6.4 9 10.6 14M13.4 14 17.6 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      PolyBench
+    </a>
+    <div class="nav__links">
+      <a href="#example">The problem</a>
+      <a href="#build">How it's built</a>
+      <a href="#results">Results</a>
+      <a href="#analysis">Analysis</a>
+      <a href="#release">Availability</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================ HERO ============================ -->
+<header class="hero" id="top">
+  <div class="hero__bg"></div>
+  <svg class="hero__mesh" aria-hidden="true" preserveAspectRatio="none" style="color:var(--accent)">
+    <defs>
+      <pattern id="chain" width="72" height="72" patternUnits="userSpaceOnUse">
+        <circle cx="10" cy="36" r="2.1" fill="currentColor" opacity=".2"/>
+        <circle cx="46" cy="18" r="2.1" fill="currentColor" opacity=".14"/>
+        <path d="M12 35 44 19M48 20 78 36" stroke="currentColor" stroke-width="1" opacity=".11" fill="none"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#chain)"/>
+  </svg>
+
+  <div class="wrap">
+    <p class="venue-row">
+      <span class="venue">Under review</span>
+      <span class="venue venue--muted">Accepted at LM4Sci @ COLM 2026</span>
+    </p>
+
+    <h1>Teaching and Evaluating LLMs to Reason About <span class="mark">Polymer Design</span></h1>
+
+    <p class="hero__sub">
+      <strong>PolyBench</strong> is a large-scale training and evaluation benchmark of more than
+      125K polymer design-related tasks, grounded in a knowledge base of over 13 million
+      experimental and synthetic polymer data points and augmented with knowledge-grounded
+      chain-of-thought supervision.
+    </p>
+
+    <p class="authors">
+      <a href="mailto:dimohanty@cs.stonybrook.edu">Dikshya Mohanty</a>,
+      Mohammad Saqib Hasan,
+      Syed Mostofa Monsur,
+      Size Zheng,
+      Benjamin Hsiao,
+      Niranjan Balasubramanian
+    </p>
+    <p class="affil">Stony Brook University</p>
+    <p class="corresp">Correspondence: <code>dimohanty@cs.stonybrook.edu</code></p>
+
+    <div class="btns">
+      <span class="btn btn--soon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        Paper <span class="tag">Soon</span>
+      </span>
+      <a class="btn btn--primary" href="https://github.com/StonyBrookNLP/PolyBench">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.8.1-.8 1.2.1 1.9 1.3 1.9 1.3 1.1 1.9 2.9 1.3 3.6 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.6 5.1 18.6 5.4 18.6 5.4c.7 1.7.3 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/></svg>
+        Code
+      </a>
+      <span class="btn btn--soon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></svg>
+        Dataset <span class="tag">Soon</span>
+      </span>
+      <span class="btn btn--soon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 0-5 5v1a4 4 0 0 0-2 3.5V14a6 6 0 0 0 6 6h2a6 6 0 0 0 6-6v-2.5A4 4 0 0 0 17 8V7a5 5 0 0 0-5-5z"/><circle cx="9.5" cy="12" r="1"/><circle cx="14.5" cy="12" r="1"/></svg>
+        Models <span class="tag">Soon</span>
+      </span>
+      <span class="btn btn--soon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v18H6.5A2.5 2.5 0 0 1 4 19.5z"/><path d="M8 7h7M8 11h7"/></svg>
+        arXiv <span class="tag">Soon</span>
+      </span>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat__n">125<span>K+</span></div>
+        <div class="stat__l">design-related tasks with reasoning traces</div>
+      </div>
+      <div class="stat">
+        <div class="stat__n">13<span>M+</span></div>
+        <div class="stat__l">polymer data points across 9 sources</div>
+      </div>
+      <div class="stat">
+        <div class="stat__n">6</div>
+        <div class="stat__l">task categories, foundational &rarr; end-to-end design</div>
+      </div>
+      <div class="stat">
+        <div class="stat__n">5</div>
+        <div class="stat__l">answer formats: QA, numeric, MCQ, ranking, SMILES</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================ 1 · THE PROBLEM ============================ -->
+<section id="example">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">The problem</p>
+      <h2>Polymer design is multi-constraint by nature</h2>
+      <p class="lede">
+        A single design prompt jointly specifies property targets, available reactants, and
+        functional constraints. A PolyBench-trained model has to decompose the prompt and emit
+        a valid SMILES repeat unit that satisfies all of them at once.
+      </p>
+    </div>
+
+    <figure>
+      <div class="teaser">
+        <div class="teaser__col">
+          <div class="teaser__label">Prompt</div>
+          <p class="prompt">
+            Design a polymer with a
+            <span class="hl hl--prop">glass transition temperature (T<sub>g</sub>) between 80&ndash;100&nbsp;°C</span>
+            using <span class="hl hl--react">CC(CCC(=O)O)C(=O)O</span> and
+            <span class="hl hl--react">CC(C)(O)c1c(O)cccc1Br</span> as monomers, while maintaining
+            <span class="hl hl--prop">chain flexibility for processing</span>. The polymer must
+            <span class="hl hl--con">retain bromine functionality for post-polymerization modification</span>.
+          </p>
+          <div class="legend">
+            <span><i style="background:var(--t3)"></i>Property target</span>
+            <span><i style="background:var(--t1)"></i>Reactants</span>
+            <span><i style="background:var(--t2)"></i>Functional constraint</span>
+          </div>
+        </div>
+
+        <div class="teaser__col">
+          <div class="teaser__label">Model reasoning</div>
+          <ol class="steps">
+            <li>Constraints: T<sub>g</sub> 80&ndash;100&nbsp;°C, flexibility, retain &ndash;Br.</li>
+            <li>Diacid &rarr; flexibility; aromatic diol &rarr; rigidity.</li>
+            <li>Balance segments to hit T<sub>g</sub> while preserving mobility.</li>
+            <li>Position Br away from reactive sites.</li>
+            <li>Condensation via &ndash;OH groups forms ester linkages.</li>
+          </ol>
+          <div class="answer">
+            <strong>Answer.</strong> Alternating units of the brominated aromatic ring connected
+            via ester linkages to flexible aliphatic segments.
+            <code class="smiles">*Oc1cccc(Br)c1C(C)(C)OC(=O)CCC(C)C(*)=O</code>
+          </div>
+        </div>
+      </div>
+      <figcaption>
+        <strong>Figure 1.</strong> An example from PolyBench. The property target, reactants, and
+        functional constraint must be satisfied jointly — this is what makes polymer design tasks
+        compositional rather than single-fact lookups.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================ 2 · HOW IT'S BUILT ============================ -->
+<section class="alt" id="build">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Construction</p>
+      <h2>How PolyBench is built</h2>
+      <p class="lede">
+        Four stages, from raw polymer corpora to
+        <code>(instruction, question, CoT, solution)</code> tuples. Splits are applied to
+        <em>polymers</em> before task generation, so the test set contains unseen polymers,
+        properties, and task variations.
+      </p>
+    </div>
+
+    <div class="pipeline">
+      <div class="pstep">
+        <h3>Knowledge base</h3>
+        <p>Aggregate open-source experimental and synthetic sources covering 13M+ polymers: SMILES, thermal and mechanical properties, monomer precursors, and reaction types.</p>
+      </div>
+      <div class="pstep">
+        <h3>Data preparation</h3>
+        <p>Standardize notation, units, and structural descriptors with RDKit and subject-matter-expert input to build one <em>polymer profile</em> per entry.</p>
+      </div>
+      <div class="pstep">
+        <h3>QA generation</h3>
+        <p>Generate tasks programmatically from templates (78%) or by prompting a teacher model for open-ended formats (22%). Splits are applied <em>before</em> generation.</p>
+      </div>
+      <div class="pstep">
+        <h3>CoT distillation</h3>
+        <p>Condition teacher models on the full profile and gold answer so they explain provided evidence rather than recall it, then fact-check the resulting traces.</p>
+      </div>
+    </div>
+
+    <figure style="margin-top:32px">
+      <div class="figframe">
+        <img src="static/images/overview.png"
+             alt="PolyBench overview. Left: the four-stage creation pipeline from knowledge base through data preparation, QA generation, and knowledge-augmented CoT distillation. Right: the six task categories ordered by reasoning complexity."
+             width="2400" height="1578" loading="lazy">
+      </div>
+      <figcaption>
+        <strong>Figure 2. PolyBench overview.</strong> <em>Left:</em> the creation pipeline, yielding
+        non-overlapping splits of 125.3K train, 1.83K dev, and 2.31K test instances.
+        <em>Right:</em> task organization — six categories arranged by reasoning complexity, each
+        annotated with its query formats and generation source (<strong>D</strong> = distilled,
+        <strong>P</strong> = programmatic).
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================ 3 · RESULTS ============================ -->
+<section id="results">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Results</p>
+      <h2>7B&ndash;32B models trained on PolyBench compete with frontier LLMs</h2>
+      <p class="lede">
+        We fine-tune Qwen-2.5-7B/14B/32B, Phi-4-14B, and ChemLLM-7B with LoRA for 3 epochs on the
+        PolyBench train and dev sets, and compare against off-the-shelf, chemistry-aligned, and
+        closed-source frontier models. Full per-task numbers across all six categories are in the
+        paper; the headline findings are below.
+      </p>
+    </div>
+
+    <div class="findings">
+      <div class="finding">
+        <div class="finding__k">0.95<small>Chem. validity</small></div>
+        <div>
+          <h3>General chemistry alignment does not transfer to polymers</h3>
+          <p>
+            Off-the-shelf base models struggle across the board, especially wherever SMILES is
+            required. Chemistry-aligned models — Llamole-8B, LlaSMol-8B, ether0-24B, ChemLLM-7B —
+            underperform on almost every PolyBench task: their knowledge is mostly about small
+            molecules and does not carry over. Training the same ChemLLM-7B on PolyBench
+            consistently beats its own base version, lifting chemical validity of generated
+            structures from 0.25 to 0.95.
+          </p>
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="finding__k">16.8<small>MAE, best overall</small></div>
+        <div>
+          <h3>PolyBench training beats every similar-sized baseline</h3>
+          <p>
+            Across all six task categories, PolyBench-trained models outperform their off-the-shelf
+            and domain-aligned counterparts, with the largest gains at 14B and 32B. Exact match on
+            structural counting rises from 0.50 to 0.87 for Qwen-2.5-14B+CoT, and property-prediction
+            error for Phi-4-14B drops from 46.2 to 16.8 MAE — the lowest of any model evaluated,
+            frontier systems included.
+          </p>
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="finding__k">0.82<small>Tanimoto sim.</small></div>
+        <div>
+          <h3>Design stays hard even for frontier LLMs</h3>
+          <p>
+            Frontier models do well on foundational tasks but struggle to generate chemically valid
+            SMILES that satisfy property, structure, and synthesis requirements at once.
+            PolyBench-trained models reach higher structural similarity to the target polymer
+            (0.82 vs. 0.48 for the strongest frontier baseline) while holding <em>lower</em>
+            synthetic accessibility scores — placing their generations at the edge of the readily
+            synthesizable range.
+          </p>
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="finding__k">14B+<small>where CoT pays</small></div>
+        <div>
+          <h3>CoT gains scale with model size — and with task compositionality</h3>
+          <p>
+            For 7B models, CoT training improves only 4&ndash;6 of 14 metrics; for the 14B&ndash;32B
+            variants it improves 8&ndash;12. The clearest gains land on compositional tasks such as
+            Advanced Property Reasoning, while tasks needing precise quantitative targets see
+            limited or even negative gains — there the added reasoning mostly adds verbosity.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Constraint satisfaction on open-ended design</h3>
+    <p style="max-width:72ch;color:var(--ink-2)">
+      A subset of the design problems is open-ended: generate a molecule satisfying multiple
+      competing constraints. Since several distinct molecules may satisfy the stated requirements,
+      we score these <strong>reference-free</strong> — evaluating the generated molecule directly
+      against the constraints stated in the question, using two independent verifiers.
+    </p>
+
+    <div class="grid-2" style="gap:16px;margin-top:22px">
+      <div class="card">
+        <div class="card__k">68%</div>
+        <h4 style="margin:6px 0 6px;font-size:15px">Verified deterministically by RDKit</h4>
+        <p style="font-size:14px;color:var(--ink-3);margin:0">
+          Hard constraints, decidable from structure alone — no model judgment involved.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card__k">32%</div>
+        <h4 style="margin:6px 0 6px;font-size:15px">Scored by GPT-5.6-Luna</h4>
+        <p style="font-size:14px;color:var(--ink-3);margin:0">
+          Soft constraints that cannot be resolved structurally, handled by a separate LLM verifier.
+        </p>
+      </div>
+    </div>
+
+    <div class="findings" style="margin-top:16px">
+      <div class="finding">
+        <div class="finding__k">0.68<small>Constraint sat.</small></div>
+        <div>
+          <h4>Phi-4-14B+CoT leads all models, including every frontier baseline</h4>
+          <p>
+            On the combined RDKit + LLM measure over the 200 open-ended design questions, our
+            PolyBench-trained Phi-4-14B+CoT variant achieves the highest constraint satisfaction of
+            any model evaluated — ahead of every frontier baseline.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 4 · ANALYSIS ============================ -->
+<section class="alt" id="analysis">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Analysis</p>
+      <h2>A compositionality gap, not a knowledge gap</h2>
+      <p class="lede">
+        Standard metrics do not explain <em>why</em> models fail. Using diagnostic sub-questions
+        generated alongside the main tasks, we run three experiments on PolyBench-trained
+        Phi-4-14B+CoT to separate missing knowledge from failure to combine it.
+      </p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <h3 style="margin-top:0">Exp 1 · Skill gap</h3>
+        <p style="font-size:14.2px;color:var(--ink-2)">
+          Can the model answer atomic sub-questions in isolation? Mean precision is high across
+          core skills — 89.4% for inference, 89.3% for definitions, 83.7% for comparison. The
+          pieces are largely there.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Exp 2 · Skill selection</h3>
+        <p style="font-size:14.2px;color:var(--ink-2)">
+          Does the model's own CoT cover the required sub-questions? Precision stays high
+          (93.0% on Conceptual Knowledge, 84.8% on Advanced Reasoning) but recall collapses —
+          47.4%, 44.1%, and just 7.0% on Comparison &amp; Ranking.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Exp 3 · Composition</h3>
+        <p style="font-size:14.2px;color:var(--ink-2)">
+          Handed the sub-questions <em>and</em> their answers, scores rise across every category —
+          but composing them into a consistently constraint-satisfying solution stays brittle.
+        </p>
+      </div>
+    </div>
+
+    <div class="table-scroll" style="margin-top:26px">
+      <table>
+        <thead>
+          <tr>
+            <th rowspan="2">Task category</th>
+            <th colspan="2" style="text-align:center;border-left:1px solid var(--border)">Exp 2 — CoT coverage</th>
+            <th colspan="3" style="text-align:center;border-left:1px solid var(--border)">Exp 3 — mean score with added context</th>
+          </tr>
+          <tr>
+            <th class="num" style="border-left:1px solid var(--border)">Precision</th><th class="num">Recall</th>
+            <th class="num" style="border-left:1px solid var(--border)">No context</th><th class="num">+ SubQs</th><th class="num">+ SubQs &amp; answers</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Structural Understanding</td><td class="num" style="border-left:1px solid var(--border)">79.5%</td><td class="num">47.2%</td><td class="num" style="border-left:1px solid var(--border)">5.08</td><td class="num">4.68</td><td class="num">6.02</td></tr>
+          <tr><td>Conceptual Knowledge</td><td class="num" style="border-left:1px solid var(--border)">93.0%</td><td class="num">47.4%</td><td class="num" style="border-left:1px solid var(--border)">4.98</td><td class="num">6.26</td><td class="num">6.48</td></tr>
+          <tr><td>Property Prediction</td><td class="num" style="border-left:1px solid var(--border)">44.0%</td><td class="num">16.4%</td><td class="num" style="border-left:1px solid var(--border)">3.14</td><td class="num">2.96</td><td class="num">3.46</td></tr>
+          <tr><td>Property Comparison &amp; Ranking</td><td class="num" style="border-left:1px solid var(--border)">11.3%</td><td class="num">7.0%</td><td class="num" style="border-left:1px solid var(--border)">4.72</td><td class="num">4.49</td><td class="num">5.92</td></tr>
+          <tr><td>Advanced Property Reasoning</td><td class="num" style="border-left:1px solid var(--border)">84.8%</td><td class="num">44.1%</td><td class="num" style="border-left:1px solid var(--border)">5.10</td><td class="num">5.94</td><td class="num">6.46</td></tr>
+          <tr><td>Synthesis &amp; Design</td><td class="num" style="border-left:1px solid var(--border)">36.3%</td><td class="num">16.6%</td><td class="num" style="border-left:1px solid var(--border)">4.30</td><td class="num">4.84</td><td class="num">5.28</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="caption">
+      <strong>Table 1.</strong> Diagnostic probes on Phi-4-14B+CoT. Models often know the necessary
+      pieces (high precision) but fail to select and propagate the right constraints and steps in
+      their own reasoning (low recall) — evidence of a compositionality gap rather than missing
+      knowledge.
+    </p>
+  </div>
+</section>
+
+<!-- ============================ 5 · AVAILABILITY ============================ -->
+<section id="release">
+  <div class="wrap narrow">
+    <div class="sec-head">
+      <p class="eyebrow">Availability</p>
+      <h2>Data, code, and models</h2>
+    </div>
+    <p style="color:var(--ink-2)">
+      All associated data and code will be released under <strong>CC BY-NC 4.0</strong> for
+      non-commercial research use in the
+      <a href="https://github.com/StonyBrookNLP/PolyBench">project GitHub repository</a>.
+      Fine-tuned model weights will be released on Hugging Face under their respective base model
+      licenses (MIT for Phi-4, Apache 2.0 for Qwen-2.5).
+    </p>
+    <p style="color:var(--ink-2)">
+      CoT traces were generated via the official Claude-3.5-Sonnet and GPT-4o APIs for research in a
+      specialized domain. We will release distilled CoT traces consistent with each provider's terms
+      of service; where terms restrict redistribution, we will release only our post-processed,
+      verified reasoning chains rather than raw teacher outputs.
+    </p>
+
+    <div class="note note--warn" style="margin-top:24px">
+      <strong>On potential risks.</strong> No generated structure in this work has been
+      experimentally synthesized or characterized. Outputs should be treated as candidate hypotheses
+      for expert review rather than design recommendations, and we caution against using them to
+      direct laboratory work without independent verification.
+    </div>
+  </div>
+</section>
+
+<!-- ============================ CITE ============================ -->
+<section class="alt" id="cite">
+  <div class="wrap narrow">
+    <div class="sec-head">
+      <p class="eyebrow">Citation</p>
+      <h2>BibTeX</h2>
+    </div>
+    <div class="bib">
+      <button class="copy-btn" id="copy-bib" type="button" data-target="bibtex">Copy</button>
+<pre id="bibtex">@misc{mohanty2026polybench,
+  title  = {Teaching and Evaluating {LLM}s to Reason About Polymer Design Related Tasks},
+  author = {Mohanty, Dikshya and Hasan, Mohammad Saqib and Monsur, Syed Mostofa
+            and Zheng, Size and Hsiao, Benjamin and Balasubramanian, Niranjan},
+  year   = {2026},
+  note   = {Under review. Accepted at the Workshop on Language Models for
+            Scientific Discovery (LM4Sci) at COLM 2026},
+  url    = {https://github.com/StonyBrookNLP/PolyBench}
+}</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FOOTER ============================ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <p style="color:var(--ink-2);font-weight:600;margin-bottom:12px">Acknowledgments</p>
+        <p>
+          This material is based on research that is in part supported by DARPA for the SciFy
+          program under agreement number HR00112520301. The U.S. Government is authorized to
+          reproduce and distribute reprints for Governmental purposes notwithstanding any copyright
+          notation thereon. This work was also supported by a seed grant from the AI Innovation
+          Institute at Stony Brook University. We thank Pegah Alipoormolabashi for their feedback on
+          drafts of this paper.
+        </p>
+        <p style="margin-top:16px">
+          © 2026 Stony Brook University · Data and code released under CC BY-NC 4.0.
+        </p>
+      </div>
+      <div>
+        <p style="color:var(--ink-2);font-weight:600;margin-bottom:12px">Links</p>
+        <div class="foot-links">
+          <a href="https://github.com/StonyBrookNLP/PolyBench">GitHub repository</a>
+          <a href="https://www.cs.stonybrook.edu/">Stony Brook CS</a>
+          <a href="mailto:dimohanty@cs.stonybrook.edu">Contact the authors</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="static/js/main.js"></script>
+</body>
+</html>
