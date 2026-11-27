@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Task Explorer — PolyBench</title>
+<meta name="description" content="Browse representative PolyBench tasks from each of the six polymer-reasoning categories.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%A7%AC%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+<header class="hero hero--slim">
+  <a class="hero__brand" href="./">
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="5" cy="7" r="2.6" fill="currentColor"/>
+      <circle cx="12" cy="16" r="2.6" fill="currentColor" opacity=".55"/>
+      <circle cx="19" cy="7" r="2.6" fill="currentColor"/>
+      <path d="M6.4 9 10.6 14M13.4 14 17.6 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <h1>PolyBench</h1>
+  </a>
+  <p class="hero__sub">Task Explorer</p>
+  <nav class="linkgrid linkgrid--slim" aria-label="Navigation">
+    <a class="lbtn" href="./"><i class="fa-solid fa-arrow-left"></i> Home</a>
+    <a class="lbtn" href="https://github.com/StonyBrookNLP/PolyBench"><i class="fa-brands fa-github"></i> Code</a>
+  </nav>
+</header>
+
+<main class="container">
+  <section class="card">
+    <h2>Explore the Tasks</h2>
+    <p>
+      PolyBench spans six task categories ordered by reasoning complexity, from reading a structure
+      to designing one. Pick a category to see a representative example from the paper. Chemical
+      structures are written as SMILES strings.
+    </p>
+
+    <div class="tabs" role="tablist" aria-label="Task category">
+      <button class="tab" role="tab" data-tab="t1" aria-selected="true">1 · Structural &amp; Syntax</button>
+      <button class="tab" role="tab" data-tab="t2" aria-selected="false">2 · Conceptual Knowledge</button>
+      <button class="tab" role="tab" data-tab="t3" aria-selected="false">3 · Property Prediction</button>
+      <button class="tab" role="tab" data-tab="t4" aria-selected="false">4 · Comparison &amp; Ranking</button>
+      <button class="tab" role="tab" data-tab="t5" aria-selected="false">5 · Advanced Reasoning</button>
+      <button class="tab" role="tab" data-tab="t6" aria-selected="false">6 · Design &amp; Synthesis</button>
+    </div>
+
+    <!-- Task 1 -->
+    <div class="panel" id="t1" role="tabpanel">
+      <div class="bar"><h3>Task 1 · Structural &amp; Syntax Understanding</h3></div>
+      <div class="qa">
+        <div class="qa__label">Question</div>
+        <p>In <code class="smiles-inline">CCOC(=O)CN(C)C(=O)C=Cc1cc(OC)ccc1OC</code>, what is the total number of heavy atoms (non-hydrogen atoms)?</p>
+        <div class="qa__label qa__label--a">Answer</div>
+        <p><strong>22</strong></p>
+      </div>
+    </div>
+
+    <!-- Task 2 -->
+    <div class="panel" id="t2" role="tabpanel" hidden>
+      <div class="bar"><h3>Task 2 · Conceptual Knowledge</h3></div>
+      <div class="qa">
+        <div class="qa__label">Question</div>
+        <p>Explain the difference between step-growth and chain-growth polymerization.</p>
+        <div class="qa__label qa__label--a">Answer</div>
+        <p>Step-growth involves monomers with multiple reactive groups forming bonds incrementally, while chain-growth proceeds via initiation, propagation, and termination through active centers.</p>
+      </div>
+    </div>
+
+    <!-- Task 3 -->
+    <div class="panel" id="t3" role="tabpanel" hidden>
+      <div class="bar"><h3>Task 3 · Property Prediction</h3></div>
+      <div class="qa">
+        <div class="qa__label">Question</div>
+        <p>Given the chemical structure and properties of
+          <em>poly[2,4,6-trimethyl-1,3-phenylene 3,3′,4,4′-benzophenonetetracarboxydiimide]</em>, represented as
+          <code class="smiles-inline">*c1ccc2c(c1)C(=O)N(C2=O)c1c(C)cc(c(c1C)N1C(=O)c2c(C1=O)cc(cc2)C(=O)*)C</code>,
+          predict its specific volume in cm³ g⁻¹.</p>
+        <div class="qa__label qa__label--a">Answer</div>
+        <p><strong>0.8 cm³ g⁻¹</strong></p>
+      </div>
+    </div>
+
+    <!-- Task 4 -->
+    <div class="panel" id="t4" role="tabpanel" hidden>
+      <div class="bar"><h3>Task 4 · Property Comparison &amp; Ranking</h3></div>
+      <div class="qa">
+        <div class="qa__label">Question</div>
+        <p>Which molecule has 210 valence electrons, one ketone functional group, and a calculated glass CTE of 120.2×10⁻⁶ K⁻¹?</p>
+        <ul class="choices">
+          <li><b>(A)</b> Polyetherimide <code class="smiles-inline">[*]OC1=CC=C(C=C1)C(=O)C1=CC=C(C=C1)OC1=CC=C2C(=O)N(C(=O)C2=C1)C1=CC=CC(=C1)N1C(=O)C2=CC=C(C=C2C1(=O))[*]</code></li>
+          <li><b>(B)</b> Polyimide <code class="smiles-inline">[*]N1C(=O)C2=CC=C(C=C2C1(=O))C(=O)C1=CC=C2C(=O)N(C(=O)C2=C1)C1=CC=CC(=C1)C(=O)C1=CC=CC(=C1)[*]</code></li>
+          <li><b>(C)</b> Poly(quinoxaline-2,7-diylcarbonylquinoxaline-7,2-diyl-1,4-phenylene) <code class="smiles-inline">[*]C1=CN=C2C=CC(=CC2=N1)C(=O)C1=CC=C2N=CC(=NC2=C1)C1=CC=C(C=C1)[*]</code></li>
+          <li><b>(D)</b> Polyimide11 <code class="smiles-inline">[*]N1C(=O)C2=CC=C(C=C2C1(=O))C(=O)C1=CC=C2C(=O)N(C(=O)C2=C1)C1=CC=C(C=C1)[*]</code></li>
+        </ul>
+        <div class="qa__label qa__label--a">Answer</div>
+        <p><strong>(A) Polyetherimide</strong></p>
+      </div>
+    </div>
+
+    <!-- Task 5 -->
+    <div class="panel" id="t5" role="tabpanel" hidden>
+      <div class="bar"><h3>Task 5 · Advanced Property Reasoning</h3></div>
+      <div class="qa">
+        <div class="qa__label">Question</div>
+        <p>Given that <code class="smiles-inline">COc1cc(C=CC(=O)c2ccc(C)cc2C)ccc1O</code> has a Bertz complexity index of 699.6 and contains 12 aromatic carbons, which structural features contribute most significantly to its molecular complexity?</p>
+        <div class="qa__label qa__label--a">Answer</div>
+        <p>The complexity arises primarily from two differently substituted aromatic rings — one bearing methoxy and hydroxyl groups and the other bearing methyl groups — connected by an α,β-unsaturated ketone. This arrangement creates an extended conjugated system with multiple substitution patterns.</p>
+      </div>
+    </div>
+
+    <!-- Task 6 -->
+    <div class="panel" id="t6" role="tabpanel" hidden>
+      <div class="bar"><h3>Task 6 · Design &amp; Synthesis</h3></div>
+
+      <div class="qa">
+        <div class="qa__label">Question · retrosynthesis</div>
+        <p>Which monomers produce <code class="smiles-inline">*Nc1c(Br)cc(C(=O)OC)cc1NC(=O)OC1CS(=O)(=O)CC1OC(*)=O</code> through condensation?</p>
+        <div class="qa__label qa__label--a">Answer</div>
+        <p>
+          <b>Monomer 1:</b> <code class="smiles-inline">O=C(Cl)OC1CS(=O)(=O)CC1OC(=O)Cl</code><br>
+          <b>Monomer 2:</b> <code class="smiles-inline">COC(=O)c1cc(N)c(N)c(Br)c1</code>
+        </p>
+      </div>
+
+      <div class="qa">
+        <div class="qa__label">Question · open-ended design</div>
+        <p class="prompt">
+          Design a polymer with a
+          <span class="hl hl--prop">glass transition temperature (T<sub>g</sub>) between 80&ndash;100&nbsp;°C</span>
+          using <span class="hl hl--react">CC(CCC(=O)O)C(=O)O</span> and
+          <span class="hl hl--react">CC(C)(O)c1c(O)cccc1Br</span> as monomers, while maintaining
+          <span class="hl hl--prop">chain flexibility for processing</span>. The polymer must
+          <span class="hl hl--con">retain bromine functionality for post-polymerization modification</span>.
+        </p>
+        <div class="qa__label qa__label--a">Reasoning &amp; answer</div>
+        <ol class="steps">
+          <li>Constraints: T<sub>g</sub> 80&ndash;100&nbsp;°C, flexibility, retain &ndash;Br.</li>
+          <li>Diacid &rarr; flexibility; aromatic diol &rarr; rigidity.</li>
+          <li>Balance segments to hit T<sub>g</sub> while preserving mobility.</li>
+          <li>Position Br away from reactive sites.</li>
+          <li>Condensation via &ndash;OH groups forms ester linkages.</li>
+        </ol>
+        <p>
+          Alternating units of the brominated aromatic ring connected via ester linkages to flexible
+          aliphatic segments.
+          <code class="smiles-inline">*Oc1cccc(Br)c1C(C)(C)OC(=O)CCC(C)C(*)=O</code>
+        </p>
+      </div>
+    </div>
+
+    <p class="caption">
+      Examples are from Table 22 of the paper (Appendix B.5) and Figure 1. In the full benchmark,
+      answers for tasks 3 and 5&ndash;6 also come with knowledge-grounded chain-of-thought traces.
+    </p>
+  </section>
+</main>
+
+<footer class="footer">
+  <p>© 2026 Stony Brook University · Data and code released under CC BY-NC 4.0 ·
+    <a href="./">Back to project page</a></p>
+</footer>
+
+<script src="static/js/main.js"></script>
+</body>
+</html>
