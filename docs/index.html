@@ -118,56 +118,6 @@
       demonstrating performance gains on external polymer benchmarks.
     </p>
 
-    <div class="bar" id="example"><h3>🧪 The Problem</h3></div>
-    <p>
-      Polymer design is multi-constraint by nature. A single design prompt jointly specifies
-      property targets, available reactants, and functional constraints. A PolyBench-trained model
-      has to decompose the prompt and emit a valid SMILES repeat unit that satisfies all of them
-      at once.
-    </p>
-
-    <figure>
-      <div class="teaser">
-        <div class="teaser__col">
-          <div class="teaser__label">Prompt</div>
-          <p class="prompt">
-            Design a polymer with a
-            <span class="hl hl--prop">glass transition temperature (T<sub>g</sub>) between 80&ndash;100&nbsp;°C</span>
-            using <span class="hl hl--react">CC(CCC(=O)O)C(=O)O</span> and
-            <span class="hl hl--react">CC(C)(O)c1c(O)cccc1Br</span> as monomers, while maintaining
-            <span class="hl hl--prop">chain flexibility for processing</span>. The polymer must
-            <span class="hl hl--con">retain bromine functionality for post-polymerization modification</span>.
-          </p>
-          <div class="legend">
-            <span><i class="sw sw--prop"></i>Property target</span>
-            <span><i class="sw sw--react"></i>Reactants</span>
-            <span><i class="sw sw--con"></i>Functional constraint</span>
-          </div>
-        </div>
-
-        <div class="teaser__col">
-          <div class="teaser__label">Model reasoning</div>
-          <ol class="steps">
-            <li>Constraints: T<sub>g</sub> 80&ndash;100&nbsp;°C, flexibility, retain &ndash;Br.</li>
-            <li>Diacid &rarr; flexibility; aromatic diol &rarr; rigidity.</li>
-            <li>Balance segments to hit T<sub>g</sub> while preserving mobility.</li>
-            <li>Position Br away from reactive sites.</li>
-            <li>Condensation via &ndash;OH groups forms ester linkages.</li>
-          </ol>
-          <div class="answer">
-            <strong>Answer.</strong> Alternating units of the brominated aromatic ring connected
-            via ester linkages to flexible aliphatic segments.
-            <code class="smiles">*Oc1cccc(Br)c1C(C)(C)OC(=O)CCC(C)C(*)=O</code>
-          </div>
-        </div>
-      </div>
-      <figcaption>
-        <strong>Figure 1.</strong> An example from PolyBench. The property target, reactants, and
-        functional constraint must be satisfied jointly — this is what makes polymer design tasks
-        compositional rather than single-fact lookups.
-      </figcaption>
-    </figure>
-
     <div class="bar" id="release"><h3>📦 Release</h3></div>
     <p>Data, code, and model weights are coming soon.</p>
   </section>
