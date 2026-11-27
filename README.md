@@ -5,7 +5,7 @@
 Dikshya Mohanty, Mohammad Saqib Hasan, Syed Mostofa Monsur, Size Zheng, Benjamin Hsiao,
 Niranjan Balasubramanian — Stony Brook University
 
-*To appear in EACL 2027*
+*To appear in Findings of EACL 2027*
 
 🌐 [Project page](https://stonybrooknlp.github.io/PolyBench/)
 
